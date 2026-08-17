@@ -1,0 +1,121 @@
+{
+  "results": [
+    {
+      "number": 1,
+      "app": "Salesforce",
+      "status": "confirmed",
+      "evidence_pages_found": 3,
+      "claims_checked": {
+        "access": "confirmed",
+        "buildability": "confirmed"
+      },
+      "needs_manual_review": false
+    },
+    {
+      "number": 2,
+      "app": "HubSpot",
+      "status": "confirmed",
+      "evidence_pages_found": 3,
+      "claims_checked": {
+        "access": "confirmed",
+        "buildability": "confirmed"
+      },
+      "needs_manual_review": false
+    },
+    {
+      "number": 3,
+      "app": "Pipedrive",
+      "status": "confirmed",
+      "evidence_pages_found": 3,
+      "claims_checked": {
+        "access": "confirmed",
+        "buildability": "confirmed"
+      },
+      "needs_manual_review": false
+    }
+  ],
+  "initial_accuracy": 100.0,
+  "final_accuracy": 100.0,
+  "improvement": 0.0,
+  "hits": [
+    {
+      "number": 1,
+      "app": "Salesforce",
+      "claims": {
+        "access": "confirmed",
+        "buildability": "confirmed"
+      }
+    },
+    {
+      "number": 2,
+      "app": "HubSpot",
+      "claims": {
+        "access": "confirmed",
+        "buildability": "confirmed"
+      }
+    },
+    {
+      "number": 3,
+      "app": "Pipedrive",
+      "claims": {
+        "access": "confirmed",
+        "buildability": "confirmed"
+      }
+    }
+  ],
+  "misses": [],
+  "human_sample": [
+    {
+      "number": 1,
+      "app": "Salesforce",
+      "category": "CRM and Sales",
+      "confidence": "high",
+      "buildability": "ready",
+      "access": "self-serve-free",
+      "mcp_status": "official",
+      "evidence_urls": [
+        "https://www.salesforce.com/blog/api-ecosystem",
+        "https://developer.salesforce.com/docs/commerce/retail-cloud/guide/retail-cloud-api-developer-guide.html",
+        "https://developer.salesforce.com/blogs/2023/06/increase-api-engagement-with-anypoint-api-experience-hub"
+      ],
+      "automated_status": "confirmed",
+      "requires_human_review": true,
+      "review_instructions": "Visit the evidence URLs for Salesforce, confirm: access=self-serve-free, buildability=ready, api_available=True, mcp_status=official."
+    },
+    {
+      "number": 2,
+      "app": "HubSpot",
+      "category": "CRM and Sales",
+      "confidence": "high",
+      "buildability": "ready",
+      "access": "paid-gated",
+      "mcp_status": "official",
+      "evidence_urls": [
+        "https://developers.hubspot.com/docs/developer-tooling/platform/versioning#api-versioning",
+        "https://growthnatives.com/blogs/hubspot/hubspot-sunsets-api-keys",
+        "https://developers.hubspot.com/docs/apps/legacy-apps/authentication/intro-to-auth"
+      ],
+      "automated_status": "confirmed",
+      "requires_human_review": true,
+      "review_instructions": "Visit the evidence URLs for HubSpot, confirm: access=paid-gated, buildability=ready, api_available=True, mcp_status=official."
+    },
+    {
+      "number": 3,
+      "app": "Pipedrive",
+      "category": "CRM and Sales",
+      "confidence": "high",
+      "buildability": "ready",
+      "access": "self-serve-free",
+      "mcp_status": "official",
+      "evidence_urls": [
+        "https://developers.pipedrive.com",
+        "https://developers.pipedrive.com/docs/api/v1",
+        "https://devcommunity.pipedrive.com/t/old-api-reference/4084"
+      ],
+      "automated_status": "confirmed",
+      "requires_human_review": true,
+      "review_instructions": "Visit the evidence URLs for Pipedrive, confirm: access=self-serve-free, buildability=ready, api_available=True, mcp_status=official."
+    }
+  ],
+  "note": "Automated verification only. Human sample requires manual inspection of the listed URLs."
+}

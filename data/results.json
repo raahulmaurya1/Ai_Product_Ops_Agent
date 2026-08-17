@@ -1,0 +1,1277 @@
+[
+  {
+    "number": 1,
+    "app": "Salesforce",
+    "category": "CRM and Sales",
+    "description": "A CRM and sales platform.",
+    "auth": [
+      "API key",
+      "token"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developer.salesforce.com/docs/commerce/retail-cloud/guide/retail-cloud-api-developer-guide.html",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://www.salesforce.com/blog/api-ecosystem",
+        "title": "3 Ways Generative AI Will Help Marketers Connect With Customers",
+        "claim": "Details the API ecosystem and its impact on revenue generation.",
+        "snippet": "Nearly every (99%) company uses public and private APIs to integrate and connect systems and data, and they generate 38% of the average organization\u2019s revenue."
+      },
+      {
+        "url": "https://developer.salesforce.com/docs/commerce/retail-cloud/guide/retail-cloud-api-developer-guide.html",
+        "title": "Point of Sale Developer Guide for Non Hyperforce Users",
+        "claim": "Provides details on Point of Sale APIs, including authentication and sample responses.",
+        "snippet": "Invoking Point of Sale APIs is a two-step process. This topic describes the steps and includes sample responses."
+      },
+      {
+        "url": "https://developer.salesforce.com/blogs/2023/06/increase-api-engagement-with-anypoint-api-experience-hub",
+        "title": "Increase API Engagement with Anypoint API Experience Hub",
+        "claim": "Introduces the Anypoint API Experience Hub and its features for managing and promoting APIs.",
+        "snippet": "We\u2019re excited to announce the release of the Anypoint API Experience Hub, MuleSoft\u2019s customizable API portal solution that helps organizations better manage their portfolio of APIs and maximize their API investments."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 2,
+    "app": "HubSpot",
+    "category": "CRM and Sales",
+    "description": "A CRM and sales platform that provides marketing, sales, and customer service tools.",
+    "auth": [
+      "OAuth 2.0",
+      "Private app access tokens",
+      "API key"
+    ],
+    "access": "paid-gated",
+    "api_available": true,
+    "api_type": [
+      "REST",
+      "GraphQL"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developers.hubspot.com/",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://developers.hubspot.com/docs/developer-tooling/platform/versioning#api-versioning",
+        "title": "HubSpot API Versioning Documentation",
+        "claim": "Details the versioning scheme for HubSpot APIs and developer platform, including GA, Supported, and Unsupported versions.",
+        "snippet": "Explains the release schedules and versioning standards for HubSpot APIs, emphasizing the transition from semantic versioning to date-based versioning."
+      },
+      {
+        "url": "https://growthnatives.com/blogs/hubspot/hubspot-sunsets-api-keys",
+        "title": "HubSpot API Keys Sunset: What You Need to Know",
+        "claim": "Announces the sunsetting of API keys and the transition to OAuth 2.0 for authentication.",
+        "snippet": "Describes the reasons behind the API key sunset, the timeline, and the required changes for developers and integrations."
+      },
+      {
+        "url": "https://developers.hubspot.com/docs/apps/legacy-apps/authentication/intro-to-auth",
+        "title": "Intro to Auth",
+        "claim": "Provides information on authentication methods, including OAuth and API keys.",
+        "snippet": "Details the authentication process and the different methods available for accessing HubSpot APIs."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 3,
+    "app": "Pipedrive",
+    "category": "CRM and Sales",
+    "description": "A CRM and sales platform.",
+    "auth": [
+      "API key"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developers.pipedrive.com",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://developers.pipedrive.com",
+        "title": "Pipedrive Developer Platform",
+        "claim": "Provides API documentation and resources.",
+        "snippet": "Easily build integrations with our API and developer platform to reach over 100,000 companies through the Pipedrive Marketplace"
+      },
+      {
+        "url": "https://developers.pipedrive.com/docs/api/v1",
+        "title": "Pipedrive API v1 Reference",
+        "claim": "Contains the RESTful Pipedrive API reference.",
+        "snippet": "This reference helps you implement the RESTful Pipedrive API. This API uses a JSON format for output and is capable of handling CORS (Cross-Origin Resource Sharing) requests."
+      },
+      {
+        "url": "https://devcommunity.pipedrive.com/t/old-api-reference/4084",
+        "title": "Old API Reference Discussion",
+        "claim": "Discusses issues with the new API reference and requests for the old version.",
+        "snippet": "Users reported issues with the new API reference, including missing features and a lack of testing capabilities.  They requested the return of the old API reference."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 4,
+    "app": "Attio",
+    "category": "CRM and Sales",
+    "description": "Attio is a CRM and sales platform that allows developers to build apps and integrate with AI tools.",
+    "auth": [
+      "API key"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST",
+      "SDK",
+      "Webhook"
+    ],
+    "api_breadth": "moderate",
+    "mcp_status": "official",
+    "mcp_url": "https://developers.attio.com/docs/mcp",
+    "buildability": "ready",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developers.attio.com/docs/webhooks",
+        "title": "Webhooks Documentation",
+        "claim": "Developers can subscribe to events in realtime using webhooks.",
+        "snippet": "Attio provides webhooks to notify developers of events in realtime."
+      },
+      {
+        "url": "https://developers.attio.com/reference/get_v2-notes",
+        "title": "REST API Reference",
+        "claim": "Developers can build apps that read and write information to and from Attio workspaces using the REST API.",
+        "snippet": "The REST API allows developers to build apps that read and write information to and from Attio workspaces."
+      },
+      {
+        "url": "https://developers.attio.com/docs/webhook-events",
+        "title": "Webhook Events Documentation",
+        "claim": "Developers can subscribe to events in realtime using webhooks.",
+        "snippet": "Attio provides webhooks to notify developers of events in realtime."
+      },
+      {
+        "url": "https://developers.attio.com/docs/app-sdk",
+        "title": "App SDK Documentation",
+        "claim": "This allows developers to embed Typescript React applications within the Attio interface and run server functions with access to our REST API.",
+        "snippet": "App SDK allows developers to embed Typescript React applications within the Attio interface and run server functions with access to our REST API."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 5,
+    "app": "Twenty",
+    "category": "CRM and Sales",
+    "description": "Twenty is a CRM and sales platform that provides REST and GraphQL APIs for data import and integration.",
+    "auth": [
+      "API key",
+      "OAuth"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST",
+      "GraphQL"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://docs.twenty.com/developers/introduction",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://docs.twenty.com/developers/introduction",
+        "title": "Developer Introduction",
+        "claim": "Provides REST and GraphQL APIs, webhooks, and OAuth.",
+        "snippet": "Extend Twenty with custom objects, server-side logic, UI components, and AI agents \u2014 all as TypeScript packages. REST and GraphQL APIs, webhooks, and OAuth."
+      },
+      {
+        "url": "https://docs.twenty.com/l/es/developers/extend/capabilities/apis",
+        "title": "API Capabilities",
+        "claim": "Generates APIs specifically for your model of data.",
+        "snippet": "Twenty generates APIs specifically for your model of data: - No se requieren IDs largos: Usa los nombres de tus objetos y campos directamente en los endpoints. - Objetos est\u00e1ndar y personalizados tratados por igual: Tus objetos personalizados reciben el mismo tratamiento de API que los incorporados. - Endpoints dedicados: Cada objeto y campo recibe su propio endpoint de API."
+      },
+      {
+        "url": "https://docs.twenty.com/user-guide/data-migration/how-tos/import-data-via-api",
+        "title": "Data Migration via API",
+        "claim": "Offers both GraphQL and REST APIs for programmatic data import.",
+        "snippet": "Twenty provides both GraphQL and REST APIs for programmatic data import. Use the API when CSV import isn\u2019t practical for your data volume or when you need automated, recurring imports."
+      },
+      {
+        "url": "https://docs.twenty.com/developers/introduction",
+        "title": "API Key Creation",
+        "claim": "Describes how to create an API key.",
+        "snippet": "Create a Clave de API - Ve a Configuraci\u00f3n \u2192 APIs y Webhooks - Haz clic en + Crear clave - Configurar: - Nombre: Nombre descriptivo para la clave - Fecha de vencimiento: Cu\u00e1ndo expira la clave - Haga clic en Guardar - Copia de inmediato \u2014 la clave solo se muestra una vez"
+      },
+      {
+        "url": "https://docs.twenty.com/l/es/developers/extend/capabilities/apis",
+        "title": "API Documentation",
+        "claim": "Provides personalized API documentation.",
+        "snippet": "Tu documentaci\u00f3n personalizada de la API est\u00e1 disponible en Configuraci\u00f3n \u2192 API & Webhooks despu\u00e9s de crear una clave de API. Como Twenty genera APIs que coinciden con tu modelo de datos personalizado, la documentaci\u00f3n es \u00fanica para tu espacio de trabajo."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 6,
+    "app": "Podio",
+    "category": "CRM and Sales",
+    "description": "Provides a programmable interface to all Podio functionality, allowing integration with other services and building applications on top of Podio.",
+    "auth": [
+      "API key"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developers.podio.com",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://developers.podio.com",
+        "title": "Podio Developer Portal",
+        "claim": "Provides API documentation and examples.",
+        "snippet": "The Podio Developer Portal is your one-stop shop for everything Podio API related."
+      },
+      {
+        "url": "https://developers.podio.com/examples/items",
+        "title": "Podio Items API Examples",
+        "claim": "Offers examples of how to use the Podio API to interact with items.",
+        "snippet": "This page provides tutorials and examples for working with items in the Podio API."
+      },
+      {
+        "url": "https://developers.podio.com/doc/reference",
+        "title": "Podio API Reference",
+        "claim": "Contains detailed documentation of the Podio API endpoints and methods.",
+        "snippet": "The API Reference provides a comprehensive overview of all available API methods and their parameters."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 7,
+    "app": "Zoho CRM",
+    "category": "CRM and Sales",
+    "description": "A CRM and sales platform offering various APIs and SDKs for integration.",
+    "auth": [
+      "OAuth2",
+      "API key",
+      "token"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST",
+      "GraphQL",
+      "SDK",
+      "CLI"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://www.zoho.com/crm/developer/docs",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://www.zoho.com/crm/developer/docs",
+        "title": "Zoho CRM Developer Documentation",
+        "claim": "Provides documentation for APIs, SDKs, and developer tools.",
+        "snippet": "Comprehensive documentation covering APIs, SDKs, and developer tools for Zoho CRM."
+      },
+      {
+        "url": "https://www.zoho.com/crm/developer",
+        "title": "Zoho CRM Developer Portal",
+        "claim": "Offers access to APIs, SDKs, and other developer resources.",
+        "snippet": "The official Zoho CRM developer portal with access to APIs, SDKs, and other resources."
+      },
+      {
+        "url": "https://www.zoho.com/books/api/v3/introduction",
+        "title": "Zoho Books API Documentation",
+        "claim": "Details the Zoho Books API, including REST principles and organization ID.",
+        "snippet": "Documentation for the Zoho Books API, including REST principles and organization ID management."
+      },
+      {
+        "url": "https://www.zohoapis.com/books/v3",
+        "title": "Zoho Books API v3 Endpoint",
+        "claim": "Provides the base URL for the Zoho Books API.",
+        "snippet": "The base URL for the Zoho Books API v3 endpoint."
+      },
+      {
+        "url": "https://www.zohoapis.com/books/v3/organizations",
+        "title": "Zoho Books Organizations API Endpoint",
+        "claim": "Allows retrieval of organization IDs.",
+        "snippet": "API endpoint to retrieve organization IDs from Zoho Books."
+      },
+      {
+        "url": "https://www.zohoapis.eu/books/v3/invoices",
+        "title": "Zoho Books API Endpoint (EU Domain)",
+        "claim": "API endpoint for Zoho Books with the EU domain.",
+        "snippet": "API endpoint for Zoho Books with the .eu domain."
+      },
+      {
+        "url": "https://www.zohoapis.com/books/v3/invoices",
+        "title": "Zoho Books API Endpoint (US Domain)",
+        "claim": "API endpoint for Zoho Books with the US domain.",
+        "snippet": "API endpoint for Zoho Books with the .com domain."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 8,
+    "app": "Close",
+    "category": "CRM and Sales",
+    "description": "A CRM platform with an API for integrations and data management.",
+    "auth": [
+      "API key",
+      "OAuth 2.0"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developer.close.com/api/overview",
+    "buildability": "ready",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developer.close.com/api/overview",
+        "title": "Close API Overview",
+        "claim": "Provides details on the Close REST API, including authentication methods, core concepts, and request/response formats.",
+        "snippet": "API Overview Key concepts for working with the Close REST API. Base URL: https://api.close.com/api/v1"
+      },
+      {
+        "url": "https://developer.close.com/api",
+        "title": "Close API",
+        "claim": "The main API endpoint for accessing Close functionality.",
+        "snippet": "API Overview Key concepts for working with the Close REST API. Base URL: https://api.close.com/api/v1"
+      },
+      {
+        "url": "https://developer.close.com/api/resources/files",
+        "title": "Files API",
+        "claim": "Allows uploading files to attach to emails and other objects.",
+        "snippet": "Files Upload files to attach to outgoing emails or other objects via the API."
+      },
+      {
+        "url": "https://api.close.com/api/openapi.json",
+        "title": "OpenAPI Specification",
+        "claim": "Provides a machine-readable specification of the API.",
+        "snippet": "We publish an OpenAPI spec at: https://api.close.com/api/openapi.json"
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 9,
+    "app": "Copper",
+    "category": "CRM and Sales",
+    "description": "A CRM and sales platform with a developer API.",
+    "auth": [
+      "OAuth2"
+    ],
+    "access": "paid-gated",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://api.copper.com/developer_api/",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://developer.copper.com/introduction/oauth/flow.html",
+        "title": "OAuth 2.0 Flow",
+        "claim": "Describes the OAuth 2.0 authorization flow for accessing the Copper Developer API.",
+        "snippet": "Provides details on the Authorization Code Grant flow, including prerequisites, steps, and request/response parameters."
+      },
+      {
+        "url": "https://developer.copper.com",
+        "title": "Copper Developer Portal",
+        "claim": "Main page for accessing the Copper Developer API documentation and resources.",
+        "snippet": "Offers access to API documentation, changelog, and other developer resources."
+      },
+      {
+        "url": "https://support.copper.com/en/articles/8823462-api-docs-and-tips",
+        "title": "API Docs and Tips",
+        "claim": "Provides support documentation and tips for using the Copper Developer API.",
+        "snippet": "Links to API documentation and support resources."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 10,
+    "app": "DealCloud",
+    "category": "CRM and Sales",
+    "description": "A CRM and sales platform.",
+    "auth": [
+      "unknown"
+    ],
+    "access": "paid-gated",
+    "api_available": true,
+    "api_type": [
+      "REST",
+      "SDK"
+    ],
+    "api_breadth": "moderate",
+    "mcp_status": "official",
+    "mcp_url": "https://api.docs.dealcloud.com/",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://api.docs.dealcloud.com/sdk/csharp",
+        "title": "DealCloud SDK - C#",
+        "claim": "Provides a wrapper around the DealCloud API for C# development.",
+        "snippet": "DealCloud SDK is a wrapper around the DealCloud API, designed to assist clients and partners to build on top of our platform quickly and easily."
+      },
+      {
+        "url": "https://api.docs.dealcloud.com",
+        "title": "DealCloud API Documentation",
+        "claim": "Official documentation for the DealCloud API.",
+        "snippet": "Dealcloud Developer Documentation"
+      },
+      {
+        "url": "https://api.docs.dealcloud.com/sdk/python",
+        "title": "DealCloud SDK - Python",
+        "claim": "Provides a wrapper around the DealCloud API for Python development.",
+        "snippet": "DealCloud SDK is a wrapper around the DealCloud API, designed to assist clients and partners to build on top of our platform quickly and easily."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 11,
+    "app": "Zendesk",
+    "category": "Support and Helpdesk",
+    "description": "A customer support and helpdesk platform.",
+    "auth": [
+      "token",
+      "API key"
+    ],
+    "access": "paid-gated",
+    "api_available": true,
+    "api_type": [
+      "REST",
+      "SDK"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developer.zendesk.com/api-reference",
+    "buildability": "ready",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "http://developer.zendesk.com/documentation",
+        "title": "Zendesk Developer Documentation",
+        "claim": "Provides comprehensive documentation for Zendesk APIs and SDKs.",
+        "snippet": "Develop on the Zendesk Sunshine Platform. Zendesk Sunshine is our open and flexible platform, built natively on AWS. You can create unique customer experiences using our APIs and SDKs, connect data sources across your technology stack, and build any app or automation you want, using the languages you love."
+      },
+      {
+        "url": "https://developer.zendesk.com/rest_api",
+        "title": "Zendesk REST API Reference",
+        "claim": "Details the REST API endpoints and functionalities.",
+        "snippet": "API Reference Welcome to the Zendesk API reference docs. Whether you're an experienced developer and Zendesk user or just starting out, this is where you'll find the documentation you need. Most of our APIs are organized by product capabilities. You'll find APIs for ticketing, help center, live chat, voice, sales CRM as well as some features that span capabilities, such as omnichannel routing and custom data."
+      },
+      {
+        "url": "https://developer.zendesk.com/api-reference?_gac=1.216811364.1627963757.CjwKCAjwr56IBhAvEiwA1fuqGuFcwiCD97erBSsykX6cfzLsAjlyQC-fAoQxKmoTRW2QA9kdsKOw8BoCwHUQAvD_BwE",
+        "title": "Zendesk API Reference",
+        "claim": "Provides API reference documentation.",
+        "snippet": "API Reference Welcome to the Zendesk API reference docs. Whether you're an experienced developer and Zendesk user or just starting out, this is where you'll find the documentation you need. Most of our APIs are organized by product capabilities. You'll find APIs for ticketing, help center, live chat, voice, sales CRM as well as some features that span capabilities, such as omnichannel routing and custom data."
+      },
+      {
+        "url": "https://developer.zendesk.com/rest_api",
+        "title": "Zendesk Public Workspace on Postman",
+        "claim": "Allows exploration of Zendesk APIs using Postman.",
+        "snippet": "To quickly get started with the Zendesk APIs, you can use the Zendesk Public Workspace on Postman. The collection includes all Zendesk APIs except the Sell and Sunshine Conversations APIs."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 12,
+    "app": "Intercom",
+    "category": "Support and Helpdesk",
+    "description": "A messaging and customer engagement platform.",
+    "auth": [
+      "API key"
+    ],
+    "access": "paid-gated",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developers.intercom.com/",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://developers.intercom.com/docs/publish-to-the-app-store/intercom-developer-terms",
+        "title": "Intercom Developer Terms",
+        "claim": "Details the terms and conditions for developers using the Intercom Developer Platform.",
+        "snippet": "These Intercom Developer Terms (\"Agreement\") are between Intercom, Inc. (\"Intercom\" or \"we\") and you, the developer entering into this Agreement (\"Developer\" or \"you\")."
+      },
+      {
+        "url": "https://developers.intercom.com/docs",
+        "title": "Intercom Developer Documentation",
+        "claim": "Provides documentation for the Intercom Developer Platform.",
+        "snippet": "Intercom makes available the Intercom Developer Platform to developers to build Developer Apps that interoperate with and enable End Users to access the Intercom Service."
+      },
+      {
+        "url": "https://www.intercom.com/help/en/articles/9071694-intercom-developer-faqs",
+        "title": "Intercom Developer FAQs",
+        "claim": "Frequently asked questions about the Intercom Developer Platform.",
+        "snippet": "These FAQs provide answers to common questions about the Intercom Developer Platform and its usage."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 13,
+    "app": "Freshdesk",
+    "category": "Support and Helpdesk",
+    "description": "A cloud-based customer support platform.",
+    "auth": [
+      "API key"
+    ],
+    "access": "paid-gated",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://developers.freshdesk.com/api",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://support.freshdesk.com/support/solutions/articles/228991-where-do-i-find-the-documentation-for-api-",
+        "title": "Where do I find the documentation for API?",
+        "claim": "Provides a link to the Freshdesk API documentation.",
+        "snippet": "Freshdesk API documentation could be found under - https://developers.freshdesk.com/api."
+      },
+      {
+        "url": "https://developers.freshdesk.com/api",
+        "title": "Freshdesk API Documentation",
+        "claim": "Official Freshdesk API documentation.",
+        "snippet": "Freshdesk is a cloud-based customer support platform that was founded with the mission of enabling companies of all sizes to provide great customer service. Our goal is simple: make it easy for brands to talk to their customers and make it easy for users to get in touch with businesses. Freshdesk's APIs belong to the Representational State Transfer (REST) category."
+      },
+      {
+        "url": "https://support.freshdesk.com/support/solutions/articles/50000011661-api-actions-library-in-freshdesk",
+        "title": "API Actions Library in Freshdesk",
+        "claim": "Details available API actions and library.",
+        "snippet": "Using the information available here, you would be able to build your own account specific API based on your business requirements."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 14,
+    "app": "Front",
+    "category": "Support and Helpdesk",
+    "description": "A platform for managing customer support and helpdesk operations.",
+    "auth": [
+      "API key"
+    ],
+    "access": "self-serve-free",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "moderate",
+    "mcp_status": "official",
+    "mcp_url": "https://dev.frontapp.com",
+    "buildability": "ready",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://help.front.com/t/q6hscw3/developer-resources-for-building-api-integrations",
+        "title": "Developer Resources for Building API Integrations",
+        "claim": "Provides developers with resources for building integrations with Front's APIs and SDKs.",
+        "snippet": "Front provides developers the following resources for building integrations with our APIs and SDKs."
+      },
+      {
+        "url": "https://help.front.com/en/articles/2309",
+        "title": "Developer resources for building API integrations",
+        "claim": "Details developer resources for building API integrations.",
+        "snippet": "Front provides developers the following resources for building integrations with our APIs and SDKs."
+      },
+      {
+        "url": "https://community.front.com/developer-discussion-39",
+        "title": "Developer Discussion",
+        "claim": "A community forum for developers to discuss Front's platform.",
+        "snippet": "Share projects or ideas you've built with the Front APIs, SDKs, or other platform features."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 15,
+    "app": "Pylon",
+    "category": "Support and Helpdesk",
+    "description": "Pylon is a support and helpdesk software product that provides programmatic access to data.",
+    "auth": [
+      "token"
+    ],
+    "access": "paid-gated",
+    "api_available": true,
+    "api_type": [
+      "REST"
+    ],
+    "api_breadth": "broad",
+    "mcp_status": "official",
+    "mcp_url": "https://docs.usepylon.com/pylon-docs/developer/api",
+    "buildability": "ready",
+    "blocker": "unknown",
+    "evidence": [
+      {
+        "url": "https://docs.usepylon.com/pylon-docs/developer/api",
+        "title": "Pylon API Documentation",
+        "claim": "Pylon\u2019s API can be used to programmatically access and take action on data within Pylon.",
+        "snippet": "Pylon\u2019s API can be used to programmatically access and take action on data within Pylon."
+      },
+      {
+        "url": "https://docs.usepylon.com/pylon-docs/developer/api/authentication",
+        "title": "Pylon API Authentication",
+        "claim": "The Pylon API uses Bearer authentication.",
+        "snippet": "The Pylon API uses Bearer authentication. This means you\u2019ll need to pass your API token in the header of your request:"
+      },
+      {
+        "url": "https://docs.usepylon.com/pylon-docs/developer/api/api-reference",
+        "title": "Pylon API Reference",
+        "claim": "This page is also available as Markdown.",
+        "snippet": "For the complete documentation index, see llms.txt. This page is also available as Markdown."
+      }
+    ],
+    "confidence": "high",
+    "needs_manual_review": false
+  },
+  {
+    "number": 16,
+    "app": "LiveAgent",
+    "category": "Support and Helpdesk",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://www.liveagent.com/blog/chat-widget-for-website",
+        "title": "The best 10 live chat widgets: Reviews, tips, and more | LiveAgent - Help Desk Software & Live Chat"
+      },
+      {
+        "url": "https://support.liveagent.com/066804-LiveAgent-API",
+        "title": "LiveAgent API"
+      },
+      {
+        "url": "https://faq.liveagent.com/575658-API",
+        "title": "API"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 17,
+    "app": "Plain",
+    "category": "Support and Helpdesk",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://help.plain.com/article/developer",
+        "title": "Admin & Developer - Developer - Overview | Plain Help Center"
+      },
+      {
+        "url": "https://www.plain.com/blog/api-first-support-platforms",
+        "title": "Best API-First Support Platforms for B2B Teams (2026) - Plain"
+      },
+      {
+        "url": "https://www.plain.com/blog/the-real-10x-engineer",
+        "title": "Plain \u2014 Meet the real 10x engineer"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 18,
+    "app": "Help Scout",
+    "category": "Support and Helpdesk",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developer.helpscout.com/open-source",
+        "title": "Help Scout Developers - Open Source Projects | Help Scout Developers"
+      },
+      {
+        "url": "https://docs.helpscout.com/article/1141-docs-api",
+        "title": "Docs API - Help Scout Support"
+      },
+      {
+        "url": "https://developer.helpscout.com",
+        "title": "Help Scout Developers - API Documentation | Help Scout ..."
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 19,
+    "app": "Gorgias",
+    "category": "Support and Helpdesk",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developers.gorgias.com/docs/overview",
+        "title": "Overview - gorgias-developers"
+      },
+      {
+        "url": "https://developers.gorgias.com",
+        "title": "gorgias-developers"
+      },
+      {
+        "url": "https://updates.gorgias.com/labels/developers",
+        "title": "Gorgias Updates"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 20,
+    "app": "Gladly",
+    "category": "Support and Helpdesk",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developer.gladly.com/chat",
+        "title": "Gladly - Documentation"
+      },
+      {
+        "url": "https://developer.gladly.com/rest",
+        "title": "REST API - Gladly Developer"
+      },
+      {
+        "url": "https://www.gladly.com/app-platform",
+        "title": "Gladly developer platform: APIs, SDKs & integrations | Gladly"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 21,
+    "app": "Slack",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://api.slack.com/changelog/2024-12-api-site-migration",
+        "title": "Slack platform API and tools docs are moving | Slack Developer Docs"
+      },
+      {
+        "url": "https://slack.com/intl/en-in/policy-archives/terms-of-service-api/2025-05-29",
+        "title": "Slack API Terms of Service | Legal | Slack"
+      },
+      {
+        "url": "https://slack.com/policy-archives/terms-of-service-api/2025-05-29",
+        "title": "Slack API Terms of Service | Legal | Slack"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 22,
+    "app": "Twilio",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://www.twilio.com/en-us/blog/new-era-for-twilio-documentation",
+        "title": "A New Era for Twilio's Documentation | Twilio"
+      },
+      {
+        "url": "https://www.twilio.com/en-us/blog/developers/new-era-for-twilio-documentation",
+        "title": "A New Era for Twilio's Documentation | Twilio"
+      },
+      {
+        "url": "https://www.twilio.com/docs/sendgrid/for-developers",
+        "title": "Twilio SendGrid developer documentation"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 23,
+    "app": "Zoho Cliq",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://www.zoho.com/cliq/help/platform/faq.html",
+        "title": "Developers FAQ | Cliq"
+      },
+      {
+        "url": "https://www.zoho.com/cliq/help/platform/getting-started-with-cliq-platform.html",
+        "title": "Getting Started with Zoho Cliq Developer Platform"
+      },
+      {
+        "url": "https://www.zoho.com/cliq/help/restapi/v3/introduction",
+        "title": "Introduction | Zoho Cliq | API Documentation"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 24,
+    "app": "Lark (Larksuite)",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://open.larksuite.com/document/uAjLw4CM/ukTMukTMukTM/moments-v1/comment/events/created",
+        "title": "Comment posted - Server API - Documentation - Lark Developer"
+      },
+      {
+        "url": "https://open.larksuite.com/document/server-docs/vc-v1/meeting/events/recording_started",
+        "title": "Start recording - Server API - Documentation - Lark Developer"
+      },
+      {
+        "url": "https://open.larksuite.com/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/recording_started",
+        "title": "Start recording - Server API - Documentation - Lark Developer"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 25,
+    "app": "Pumble",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://pumble.com/help/de?p=7104",
+        "title": "Pumble API-\u00dcbersicht - Pumble-Hilfe"
+      },
+      {
+        "url": "https://pumble.com/help/de/integrations/automation-workflow-integrations/api-keys-integration",
+        "title": "Pumble API-\u00dcbersicht - Pumble-Hilfe"
+      },
+      {
+        "url": "https://pumble.com/help/integrations/automation-workflow-integrations/api-keys-integration",
+        "title": "Pumble API Overview"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 26,
+    "app": "Discord",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://docs.discord.com/developers/change-log",
+        "title": "Change Log - Documentation - Discord Developer Portal"
+      },
+      {
+        "url": "https://docs.discord.com/developers/quick-start/overview-of-apps",
+        "title": "Overview of Discord Apps - Documentation - Discord"
+      },
+      {
+        "url": "https://docs.discord.com/developers/topics/oauth2",
+        "title": "OAuth2 - Documentation - Discord Developer Portal"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 27,
+    "app": "Telegram",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://core.telegram.org/gateway/api",
+        "title": "Telegram Gateway API"
+      },
+      {
+        "url": "https://core.telegram.org",
+        "title": "Telegram APIs"
+      },
+      {
+        "url": "https://core.telegram.org/api/terms",
+        "title": "Telegram API Terms of Service"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 28,
+    "app": "WhatsApp Business",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developers.facebook.com/documentation/business-messaging/whatsapp/about-the-platform",
+        "title": "About the WhatsApp Business Platform - Meta for Developers"
+      },
+      {
+        "url": "https://developers.facebook.com/documentation/business-messaging/whatsapp/get-started",
+        "title": "WhatsApp Cloud API Get Started - Meta for Developers"
+      },
+      {
+        "url": "https://developers.facebook.com/documentation/business-messaging/whatsapp/reference/whatsapp-business-account/whatsapp-business-account-api",
+        "title": "WhatsApp Business Account API - Meta for Developers"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 29,
+    "app": "Aircall",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developer.aircall.io/docs/introduction",
+        "title": "Introduction - Aircall for Developers"
+      },
+      {
+        "url": "https://developer.aircall.io/docs/sms",
+        "title": "Overview"
+      },
+      {
+        "url": "https://developer.aircall.io/docs/calls",
+        "title": "Overview"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 30,
+    "app": "Vonage",
+    "category": "Communications and Messaging",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developer.vonage.com/en/team",
+        "title": "Vonage API Developer"
+      },
+      {
+        "url": "https://developer.vonage.com/en/application/overview",
+        "title": "Vonage Application API Overview | Vonage API Documentation"
+      },
+      {
+        "url": "https://developer.vonage.com/en/vonage-business-cloud/overview",
+        "title": "Vonage Business Communication APIs | Vonage API Documentation"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 31,
+    "app": "Google Ads",
+    "category": "Marketing, Ads, Email and Social",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developers.google.com/google-ads/api/rest/design/overview",
+        "title": "REST Interface Design \u00a0|\u00a0 Google Ads API \u00a0|\u00a0 Google for Developers"
+      },
+      {
+        "url": "https://developers.google.com/google-ads/api/docs/developer-toolkit/mcp-server?hl=id",
+        "title": "Server MCP Google Ads: Panduan integrasi developer \u00a0|\u00a0 Google Ads API \u00a0|\u00a0 Google for Developers"
+      },
+      {
+        "url": "https://developers.google.com/google-ads/api/docs/developer-toolkit/mcp-server#get-started",
+        "title": "Google Ads MCP server: Developer integration guide \u00a0|\u00a0 Google Ads API \u00a0|\u00a0 Google for Developers"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 32,
+    "app": "Meta Ads",
+    "category": "Marketing, Ads, Email and Social",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://developers.facebook.com/docs/graph-api/support-and-tools?locale=fr_FR",
+        "title": "Status, Support, and Tools - D\u00e9veloppement d\u2019applications avec Meta - Documentation - Meta for Developers"
+      },
+      {
+        "url": "https://developers.facebook.com/docs/graph-api/support-and-tools",
+        "title": "Status, Support, and Tools - App Development with Meta - Documentation - Meta for Developers"
+      },
+      {
+        "url": "https://developers.facebook.com/docs/marketing-api/brand-safety-and-suitability/brand-safety-partners",
+        "title": "Brand safety and suitability partner setup"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 33,
+    "app": "LinkedIn Ads",
+    "category": "Marketing, Ads, Email and Social",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/marketing-integrations-overview?view=li-lms-2026-07",
+        "title": "LinkedIn Marketing Developer Platform - API Documentation"
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2026-06",
+        "title": "Recent Marketing API Changes - LinkedIn"
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/linkedin/marketing/overview?view=li-lms-2026-04",
+        "title": "LinkedIn Marketing API - Overview - LinkedIn | Microsoft Learn"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  },
+  {
+    "number": 34,
+    "app": "GoHighLevel",
+    "category": "Marketing, Ads, Email and Social",
+    "description": "Extraction failed after 3 attempts.",
+    "auth": [],
+    "access": "unknown",
+    "api_available": false,
+    "api_type": [],
+    "api_breadth": "unknown",
+    "mcp_status": "unknown",
+    "mcp_url": null,
+    "buildability": "unknown",
+    "blocker": null,
+    "evidence": [
+      {
+        "url": "https://marketplace.gohighlevel.com/docs/Authorization/DeveloperGlossary",
+        "title": "Developer's Glossary of Terms | HighLevel API"
+      },
+      {
+        "url": "https://help.gohighlevel.com/support/solutions/articles/48001060529-highlevel-api-documentation",
+        "title": "HighLevel API Documentation"
+      },
+      {
+        "url": "https://marketplace.gohighlevel.com/docs/Authorization/OAuth2.0",
+        "title": "OAuth 2.0 | HighLevel API"
+      }
+    ],
+    "confidence": "low",
+    "needs_manual_review": true
+  }
+]

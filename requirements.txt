@@ -1,0 +1,7 @@
+python-dotenv
+pydantic
+httpx
+trafilatura
+beautifulsoup4
+tavily-python
+google-genai

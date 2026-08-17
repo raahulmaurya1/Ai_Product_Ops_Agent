@@ -1,0 +1,1253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Product Ops Research Agent — Case Study</title>
+<meta name="description" content="Research findings from 100 AI-connected applications: API availability, authentication, MCP support, and buildability analysis.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#f1f5f9;color:#1e293b;line-height:1.6}
+a{color:#6366f1;text-decoration:none}
+a:hover{text-decoration:underline}
+main{max-width:1500px;margin:auto;padding:32px 24px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+  color:white;padding:60px 48px;border-radius:20px;margin-bottom:32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(99,102,241,.3),transparent 70%);border-radius:50%}
+.hero h1{font-size:2.5rem;font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.hero .sub{font-size:1.1rem;color:#a5b4fc;max-width:600px}
+.hero .badge-row{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+.hero-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+
+/* Metrics */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px}
+.metric{background:white;padding:24px;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);
+  border-left:4px solid #6366f1}
+.metric .label{font-size:13px;color:#64748b;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.metric .value{font-size:2rem;font-weight:800;color:#1e293b;margin-top:4px}
+.metric .sub{font-size:12px;color:#94a3b8;margin-top:2px}
+
+/* Section */
+section{background:white;border-radius:16px;padding:32px;margin-bottom:24px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06)}
+section h2{font-size:1.4rem;font-weight:700;margin-bottom:20px;color:#1e293b;
+  display:flex;align-items:center;gap:10px}
+section h2::before{content:'';display:inline-block;width:4px;height:24px;
+  background:#6366f1;border-radius:2px}
+h3{font-size:1.1rem;font-weight:600;margin:20px 0 12px;color:#334155}
+
+/* Charts grid */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:24px}
+.chart-block{padding:20px;background:#fafbfc;border-radius:12px;border:1px solid #e2e8f0}
+.chart-title{font-size:14px;font-weight:700;color:#475569;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+.chart-empty{color:#94a3b8;font-style:italic;font-size:14px}
+
+/* Accuracy */
+.accuracy-vis{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}
+.acc-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px 24px;text-align:center;min-width:140px}
+.acc-label{font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.5px}
+.acc-value{font-size:2rem;font-weight:800;margin:8px 0 4px}
+.acc-sub{font-size:11px;color:#94a3b8}
+.acc-arrow{font-size:24px;color:#94a3b8}
+
+/* Workflow */
+.workflow-wrap{overflow-x:auto;padding:12px 0}
+
+/* Wins */
+.wins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.win-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px}
+.win-num{font-size:12px;color:#94a3b8;font-weight:600}
+.win-name{font-size:15px;font-weight:700;color:#1e293b;margin:4px 0 2px}
+.win-cat{font-size:11px;color:#64748b;margin-bottom:8px}
+.win-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;border:1px solid}
+.tag-access{background:#dcfce722;color:#16a34a;border-color:#bbf7d0}
+.tag-breadth{background:#e0e7ff22;color:#6366f1;border-color:#c7d2fe}
+.tag-mcp{background:#fdf4ff22;color:#a855f7;border-color:#e9d5ff}
+
+/* Badges */
+.badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;border:1px solid;white-space:nowrap}
+
+/* Table */
+.search-bar{width:100%;padding:12px 16px;border:1px solid #e2e8f0;border-radius:10px;
+  font-size:14px;margin-bottom:16px;outline:none;font-family:inherit}
+.search-bar:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.wrap{overflow:auto;max-height:600px;border-radius:10px;border:1px solid #e2e8f0}
+table{border-collapse:collapse;width:100%;font-size:12px;background:white}
+th{background:#f8fafc;padding:10px 12px;border-bottom:2px solid #e2e8f0;
+  text-align:left;font-weight:700;font-size:11px;color:#475569;text-transform:uppercase;
+  letter-spacing:.5px;position:sticky;top:0;z-index:1}
+td{padding:10px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+tr:hover td{background:#fafbff}
+.num{color:#94a3b8;font-weight:700;white-space:nowrap}
+.app-name{white-space:nowrap}
+.desc{max-width:200px;color:#475569}
+.blocker{max-width:160px;color:#ef4444;font-size:11px}
+.ev-link{font-size:11px;background:#f1f5f9;padding:2px 6px;border-radius:6px;margin-right:4px;display:inline-block}
+.mini-table{width:100%;border-collapse:collapse;font-size:13px}
+.mini-table th{background:#f8fafc;padding:8px 12px;border-bottom:2px solid #e2e8f0;
+  font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px}
+.mini-table td{padding:8px 12px;border-bottom:1px solid #f1f5f9}
+
+/* Misc */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.hit-miss-list{list-style:none;padding:0}
+.hit-miss-list li{padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
+.alert-box{background:#fef3c7;border:1px solid #fde68a;border-radius:10px;
+  padding:14px 18px;margin-bottom:16px;font-size:13px;color:#92400e}
+.findings-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.findings-list li{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;
+  padding:14px 16px;font-size:13px;display:flex;align-items:flex-start;gap:8px}
+.finding-icon{font-size:18px}
+.note{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 16px;
+  font-size:13px;color:#0369a1;margin-top:12px}
+
+@media(max-width:900px){
+  .two-col{grid-template-columns:1fr}
+  .hero h1{font-size:1.8rem}
+  .hero{padding:40px 28px}
+}
+</style>
+</head>
+<body>
+<main>
+
+<!-- HERO -->
+<section class="hero" style="background:linear-gradient(135deg,#0f172a,#1e1b4b,#0f172a)">
+  <h1>AI Product Ops Research Agent</h1>
+  <p class="sub">Automated research across 100 apps — API discovery, authentication mapping, MCP analysis, and buildability scoring for an AI-agent toolkit.</p>
+  <div class="badge-row">
+    <span class="hero-badge">🔍 Tavily Search</span>
+    <span class="hero-badge">🤖 Gemma 4 26B</span>
+    <span class="hero-badge">✅ Pydantic Validated</span>
+    <span class="hero-badge">📊 34 Apps Researched</span>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric" style="border-color:#6366f1">
+    <div class="label">Apps Researched</div>
+    <div class="value">34</div>
+    <div class="sub">of 100 targets</div>
+  </div>
+  <div class="metric" style="border-color:#22c55e">
+    <div class="label">Has Public API</div>
+    <div class="value">15</div>
+    <div class="sub">apps with documented API</div>
+  </div>
+  <div class="metric" style="border-color:#f59e0b">
+    <div class="label">Final Accuracy</div>
+    <div class="value">100.0%</div>
+    <div class="sub">+0.0 pts vs initial</div>
+  </div>
+  <div class="metric" style="border-color:#a855f7">
+    <div class="label">MCP Enabled</div>
+    <div class="value">15</div>
+    <div class="sub">official + community</div>
+  </div>
+  <div class="metric" style="border-color:#84cc16">
+    <div class="label">Easy Wins</div>
+    <div class="value">8</div>
+    <div class="sub">self-serve + broad API</div>
+  </div>
+  <div class="metric" style="border-color:#ef4444">
+    <div class="label">Gated / Blocked</div>
+    <div class="value">7</div>
+    <div class="sub">require outreach</div>
+  </div>
+</div>
+
+<!-- KEY FINDINGS -->
+<section>
+  <h2>Key Findings</h2>
+  <ul class="findings-list"><li><span class="finding-icon">🏗️</span>15 of 34 apps are ready or buildable as an AI-agent toolkit</li>
+<li><span class="finding-icon">🔓</span>15 of 34 apps expose a public API</li>
+<li><span class="finding-icon">🤖</span>15 apps have official or community MCP support</li>
+<li><span class="finding-icon">🚧</span>7 apps have significant access gates (paid/partner/contact-sales)</li>
+<li><span class="finding-icon">⭐</span>8 apps are easy-win candidates (self-serve + broad API + buildable)</li>
+<li><span class="finding-icon">👤</span>19 apps require manual review due to insufficient evidence</li></ul>
+</section>
+
+<!-- CHARTS -->
+<section>
+  <h2>Pattern Analysis</h2>
+  <div class="charts-grid"><div class="chart-block">
+  <div class="chart-title">Authentication Methods</div>
+  <svg width="680" height="320" xmlns="http://www.w3.org/2000/svg">
+    
+  <text x="192" y="51" text-anchor="end" font-size="12" fill="#64748b">API key</text>
+  <rect x="200" y="30" width="420" height="32" rx="4" fill="#6366f1" opacity="0.85"/>
+  <text x="626" y="51" font-size="12" fill="#334155" font-weight="600">12</text>
+  <text x="192" y="91" text-anchor="end" font-size="12" fill="#64748b">token</text>
+  <rect x="200" y="70" width="140" height="32" rx="4" fill="#6366f1" opacity="0.85"/>
+  <text x="346" y="91" font-size="12" fill="#334155" font-weight="600">4</text>
+  <text x="192" y="131" text-anchor="end" font-size="12" fill="#64748b">OAuth 2.0</text>
+  <rect x="200" y="110" width="70" height="32" rx="4" fill="#6366f1" opacity="0.85"/>
+  <text x="276" y="131" font-size="12" fill="#334155" font-weight="600">2</text>
+  <text x="192" y="171" text-anchor="end" font-size="12" fill="#64748b">OAuth2</text>
+  <rect x="200" y="150" width="70" height="32" rx="4" fill="#6366f1" opacity="0.85"/>
+  <text x="276" y="171" font-size="12" fill="#334155" font-weight="600">2</text>
+  <text x="192" y="211" text-anchor="end" font-size="12" fill="#64748b">Private app access tokens</text>
+  <rect x="200" y="190" width="35" height="32" rx="4" fill="#6366f1" opacity="0.85"/>
+  <text x="241" y="211" font-size="12" fill="#334155" font-weight="600">1</text>
+  <text x="192" y="251" text-anchor="end" font-size="12" fill="#64748b">OAuth</text>
+  <rect x="200" y="230" width="35" height="32" rx="4" fill="#6366f1" opacity="0.85"/>
+  <text x="241" y="251" font-size="12" fill="#334155" font-weight="600">1</text>
+  <text x="192" y="291" text-anchor="end" font-size="12" fill="#64748b">unknown</text>
+  <rect x="200" y="270" width="35" height="32" rx="4" fill="#6366f1" opacity="0.85"/>
+  <text x="241" y="291" font-size="12" fill="#334155" font-weight="600">1</text>
+  </svg>
+</div>
+<div class="chart-block">
+  <div class="chart-title">Developer Access / Gating</div>
+  <svg width="680" height="160" xmlns="http://www.w3.org/2000/svg">
+    
+  <text x="192" y="51" text-anchor="end" font-size="12" fill="#64748b">unknown</text>
+  <rect x="200" y="30" width="420" height="32" rx="4" fill="#f59e0b" opacity="0.85"/>
+  <text x="626" y="51" font-size="12" fill="#334155" font-weight="600">19</text>
+  <text x="192" y="91" text-anchor="end" font-size="12" fill="#64748b">self-serve-free</text>
+  <rect x="200" y="70" width="176" height="32" rx="4" fill="#f59e0b" opacity="0.85"/>
+  <text x="382" y="91" font-size="12" fill="#334155" font-weight="600">8</text>
+  <text x="192" y="131" text-anchor="end" font-size="12" fill="#64748b">paid-gated</text>
+  <rect x="200" y="110" width="154" height="32" rx="4" fill="#f59e0b" opacity="0.85"/>
+  <text x="360" y="131" font-size="12" fill="#334155" font-weight="600">7</text>
+  </svg>
+</div>
+<div class="chart-block">
+  <div class="chart-title">Buildability</div>
+  <svg width="680" height="120" xmlns="http://www.w3.org/2000/svg">
+    
+  <text x="192" y="51" text-anchor="end" font-size="12" fill="#64748b">unknown</text>
+  <rect x="200" y="30" width="420" height="32" rx="4" fill="#22c55e" opacity="0.85"/>
+  <text x="626" y="51" font-size="12" fill="#334155" font-weight="600">19</text>
+  <text x="192" y="91" text-anchor="end" font-size="12" fill="#64748b">ready</text>
+  <rect x="200" y="70" width="331" height="32" rx="4" fill="#22c55e" opacity="0.85"/>
+  <text x="537" y="91" font-size="12" fill="#334155" font-weight="600">15</text>
+  </svg>
+</div>
+<div class="chart-block">
+  <div class="chart-title">MCP Adoption</div>
+  <svg width="680" height="120" xmlns="http://www.w3.org/2000/svg">
+    
+  <text x="192" y="51" text-anchor="end" font-size="12" fill="#64748b">unknown</text>
+  <rect x="200" y="30" width="420" height="32" rx="4" fill="#a855f7" opacity="0.85"/>
+  <text x="626" y="51" font-size="12" fill="#334155" font-weight="600">19</text>
+  <text x="192" y="91" text-anchor="end" font-size="12" fill="#64748b">official</text>
+  <rect x="200" y="70" width="331" height="32" rx="4" fill="#a855f7" opacity="0.85"/>
+  <text x="537" y="91" font-size="12" fill="#334155" font-weight="600">15</text>
+  </svg>
+</div>
+<div class="chart-block">
+  <div class="chart-title">Top Blockers</div>
+  <svg width="680" height="80" xmlns="http://www.w3.org/2000/svg">
+    
+  <text x="192" y="51" text-anchor="end" font-size="12" fill="#64748b">unknown</text>
+  <rect x="200" y="30" width="420" height="32" rx="4" fill="#ef4444" opacity="0.85"/>
+  <text x="626" y="51" font-size="12" fill="#334155" font-weight="600">11</text>
+  </svg>
+</div>
+<div class="chart-block">
+  <div class="chart-title">API Types</div>
+  <svg width="680" height="240" xmlns="http://www.w3.org/2000/svg">
+    
+  <text x="192" y="51" text-anchor="end" font-size="12" fill="#64748b">REST</text>
+  <rect x="200" y="30" width="420" height="32" rx="4" fill="#0ea5e9" opacity="0.85"/>
+  <text x="626" y="51" font-size="12" fill="#334155" font-weight="600">15</text>
+  <text x="192" y="91" text-anchor="end" font-size="12" fill="#64748b">SDK</text>
+  <rect x="200" y="70" width="112" height="32" rx="4" fill="#0ea5e9" opacity="0.85"/>
+  <text x="318" y="91" font-size="12" fill="#334155" font-weight="600">4</text>
+  <text x="192" y="131" text-anchor="end" font-size="12" fill="#64748b">GraphQL</text>
+  <rect x="200" y="110" width="84" height="32" rx="4" fill="#0ea5e9" opacity="0.85"/>
+  <text x="290" y="131" font-size="12" fill="#334155" font-weight="600">3</text>
+  <text x="192" y="171" text-anchor="end" font-size="12" fill="#64748b">Webhook</text>
+  <rect x="200" y="150" width="28" height="32" rx="4" fill="#0ea5e9" opacity="0.85"/>
+  <text x="234" y="171" font-size="12" fill="#334155" font-weight="600">1</text>
+  <text x="192" y="211" text-anchor="end" font-size="12" fill="#64748b">CLI</text>
+  <rect x="200" y="190" width="28" height="32" rx="4" fill="#0ea5e9" opacity="0.85"/>
+  <text x="234" y="211" font-size="12" fill="#334155" font-weight="600">1</text>
+  </svg>
+</div></div>
+</section>
+
+<!-- CATEGORY ANALYSIS -->
+<section>
+  <h2>Category Analysis</h2>
+  <table class="mini-table">
+<thead><tr><th>Category</th><th>Apps</th><th>Has API</th><th>Ready/Buildable</th><th>MCP</th><th>Dominant Access</th></tr></thead>
+<tbody><tr>
+  <td><strong>CRM and Sales</strong></td>
+  <td>10</td>
+  <td>10</td>
+  <td>10 <span style="color:#94a3b8;font-size:11px">(100%)</span></td>
+  <td>10</td>
+  <td>self-serve-free</td>
+</tr><tr>
+  <td><strong>Support and Helpdesk</strong></td>
+  <td>10</td>
+  <td>5</td>
+  <td>5 <span style="color:#94a3b8;font-size:11px">(50%)</span></td>
+  <td>5</td>
+  <td>unknown</td>
+</tr><tr>
+  <td><strong>Communications and Messaging</strong></td>
+  <td>10</td>
+  <td>0</td>
+  <td>0 <span style="color:#94a3b8;font-size:11px">(0%)</span></td>
+  <td>0</td>
+  <td>unknown</td>
+</tr><tr>
+  <td><strong>Marketing, Ads, Email and Social</strong></td>
+  <td>4</td>
+  <td>0</td>
+  <td>0 <span style="color:#94a3b8;font-size:11px">(0%)</span></td>
+  <td>0</td>
+  <td>unknown</td>
+</tr></tbody>
+</table>
+</section>
+
+<!-- EASY WINS -->
+<section>
+  <h2>⭐ Easy Wins — Top Toolkit Candidates</h2>
+  <p style="color:#64748b;margin-bottom:16px;font-size:14px">Apps with: public API + self-serve access + broad/moderate API surface + buildable/ready status.</p>
+  <div class="wins-grid"><div class="win-card">
+  <div class="win-num">#1</div>
+  <div class="win-name">Salesforce</div>
+  <div class="win-cat">CRM and Sales</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">broad</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div><div class="win-card">
+  <div class="win-num">#3</div>
+  <div class="win-name">Pipedrive</div>
+  <div class="win-cat">CRM and Sales</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">broad</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div><div class="win-card">
+  <div class="win-num">#4</div>
+  <div class="win-name">Attio</div>
+  <div class="win-cat">CRM and Sales</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">moderate</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div><div class="win-card">
+  <div class="win-num">#5</div>
+  <div class="win-name">Twenty</div>
+  <div class="win-cat">CRM and Sales</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">broad</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div><div class="win-card">
+  <div class="win-num">#6</div>
+  <div class="win-name">Podio</div>
+  <div class="win-cat">CRM and Sales</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">broad</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div><div class="win-card">
+  <div class="win-num">#7</div>
+  <div class="win-name">Zoho CRM</div>
+  <div class="win-cat">CRM and Sales</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">broad</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div><div class="win-card">
+  <div class="win-num">#8</div>
+  <div class="win-name">Close</div>
+  <div class="win-cat">CRM and Sales</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">broad</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div><div class="win-card">
+  <div class="win-num">#14</div>
+  <div class="win-name">Front</div>
+  <div class="win-cat">Support and Helpdesk</div>
+  <div class="win-tags">
+    <span class="tag tag-access">self-serve-free</span>
+    <span class="tag tag-breadth">moderate</span><span class="tag tag-mcp">MCP official</span>
+  </div>
+</div></div>
+</section>
+
+<!-- OUTREACH -->
+<section>
+  <h2>🚧 Blocked &amp; Gated Apps — Outreach Opportunities</h2>
+  <p style="color:#64748b;margin-bottom:16px;font-size:14px">These apps require partner agreements, enterprise accounts, or sales contact before building.</p>
+  <table class="mini-table">
+<thead><tr><th>#</th><th>App</th><th>Category</th><th>Access</th><th>Buildability</th><th>Blocker</th></tr></thead>
+<tbody><tr>
+  <td>#2</td>
+  <td><strong>HubSpot</strong></td>
+  <td>CRM and Sales</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td>unknown</td>
+</tr><tr>
+  <td>#9</td>
+  <td><strong>Copper</strong></td>
+  <td>CRM and Sales</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td>unknown</td>
+</tr><tr>
+  <td>#10</td>
+  <td><strong>DealCloud</strong></td>
+  <td>CRM and Sales</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td>unknown</td>
+</tr><tr>
+  <td>#11</td>
+  <td><strong>Zendesk</strong></td>
+  <td>Support and Helpdesk</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td>—</td>
+</tr><tr>
+  <td>#12</td>
+  <td><strong>Intercom</strong></td>
+  <td>Support and Helpdesk</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td>unknown</td>
+</tr><tr>
+  <td>#13</td>
+  <td><strong>Freshdesk</strong></td>
+  <td>Support and Helpdesk</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td>unknown</td>
+</tr><tr>
+  <td>#15</td>
+  <td><strong>Pylon</strong></td>
+  <td>Support and Helpdesk</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td>unknown</td>
+</tr></tbody>
+</table>
+</section>
+
+<!-- AGENT WORKFLOW -->
+<section>
+  <h2>Agent Architecture</h2>
+  <div class="workflow-wrap">
+  <svg width="1170" height="100" xmlns="http://www.w3.org/2000/svg" style="min-width:1170px">
+    
+  <g>
+    <rect x="0" y="20" width="110" height="56" rx="10" fill="#6366f1" opacity="0.15" stroke="#6366f1" stroke-width="1.5"/>
+    <text x="55" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#6366f1">README</text>
+    <text x="55" y="62" text-anchor="middle" font-size="10" fill="#64748b">100 crawl targets</text>
+    <text x="120" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="130" y="20" width="110" height="56" rx="10" fill="#8b5cf6" opacity="0.15" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="185" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#8b5cf6">Tavily Search</text>
+    <text x="185" y="62" text-anchor="middle" font-size="10" fill="#64748b">4 queries/app</text>
+    <text x="250" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="260" y="20" width="110" height="56" rx="10" fill="#a78bfa" opacity="0.15" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="315" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#a78bfa">Web Crawler</text>
+    <text x="315" y="62" text-anchor="middle" font-size="10" fill="#64748b">Top 3 sources</text>
+    <text x="380" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="390" y="20" width="110" height="56" rx="10" fill="#c084fc" opacity="0.15" stroke="#c084fc" stroke-width="1.5"/>
+    <text x="445" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#c084fc">Gemma 4 26B</text>
+    <text x="445" y="62" text-anchor="middle" font-size="10" fill="#64748b">JSON extraction</text>
+    <text x="510" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="520" y="20" width="110" height="56" rx="10" fill="#e879f9" opacity="0.15" stroke="#e879f9" stroke-width="1.5"/>
+    <text x="575" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#e879f9">Pydantic</text>
+    <text x="575" y="62" text-anchor="middle" font-size="10" fill="#64748b">Schema validation</text>
+    <text x="640" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="650" y="20" width="110" height="56" rx="10" fill="#f472b6" opacity="0.15" stroke="#f472b6" stroke-width="1.5"/>
+    <text x="705" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#f472b6">Verification</text>
+    <text x="705" y="62" text-anchor="middle" font-size="10" fill="#64748b">Claim cross-check</text>
+    <text x="770" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="780" y="20" width="110" height="56" rx="10" fill="#fb7185" opacity="0.15" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="835" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#fb7185">Human Sample</text>
+    <text x="835" y="62" text-anchor="middle" font-size="10" fill="#64748b">12-app review</text>
+    <text x="900" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="910" y="20" width="110" height="56" rx="10" fill="#f87171" opacity="0.15" stroke="#f87171" stroke-width="1.5"/>
+    <text x="965" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#f87171">Analysis</text>
+    <text x="965" y="62" text-anchor="middle" font-size="10" fill="#64748b">Pattern detection</text>
+    <text x="1030" y="52" font-size="18" fill="#94a3b8">›</text>
+  </g>
+  <g>
+    <rect x="1040" y="20" width="110" height="56" rx="10" fill="#fbbf24" opacity="0.15" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="1095" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#fbbf24">HTML Report</text>
+    <text x="1095" y="62" text-anchor="middle" font-size="10" fill="#64748b">Case study</text>
+    
+  </g>
+  </svg>
+</div>
+  <div class="two-col" style="margin-top:24px">
+    <div>
+      <h3>Python handles</h3>
+      <ul style="font-size:13px;color:#475569;line-height:2;padding-left:20px">
+        <li>Parsing README for 100 crawl targets</li>
+        <li>Tavily multi-query search (4 queries/app)</li>
+        <li>HTTP crawling with fallback extraction</li>
+        <li>Text cleaning and length limiting</li>
+        <li>Persisting results after each app</li>
+        <li>Resume from last saved state</li>
+        <li>Verification and accuracy calculation</li>
+        <li>Pattern analysis and report generation</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Gemma 4 26B handles</h3>
+      <ul style="font-size:13px;color:#475569;line-height:2;padding-left:20px">
+        <li>Reading combined source text</li>
+        <li>Extracting structured facts as JSON</li>
+        <li>Classifying authentication methods</li>
+        <li>Determining developer access level</li>
+        <li>Assessing API availability and breadth</li>
+        <li>Detecting MCP support</li>
+        <li>Scoring buildability and confidence</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">
+    <strong>Model:</strong> Self-hosted Gemma 4 26B via OpenAI-compatible HTTP endpoint (ngrok). 
+    Python handles all I/O; Gemma only performs structured text extraction.
+  </div>
+</section>
+
+<!-- VERIFICATION -->
+<section>
+  <h2>Automated Verification</h2>
+  <div class="wrap">
+<table class="mini-table">
+<thead><tr><th>#</th><th>App</th><th>Status</th><th>Evidence URLs Live</th><th>Claims Checked</th></tr></thead>
+<tbody><tr>
+  <td>#1</td>
+  <td>Salesforce</td>
+  <td><span style="color:#22c55e;font-weight:700">confirmed</span></td>
+  <td>3</td>
+  <td style="font-size:11px">access=confirmed; buildability=confirmed</td>
+</tr><tr>
+  <td>#2</td>
+  <td>HubSpot</td>
+  <td><span style="color:#22c55e;font-weight:700">confirmed</span></td>
+  <td>3</td>
+  <td style="font-size:11px">access=confirmed; buildability=confirmed</td>
+</tr><tr>
+  <td>#3</td>
+  <td>Pipedrive</td>
+  <td><span style="color:#22c55e;font-weight:700">confirmed</span></td>
+  <td>3</td>
+  <td style="font-size:11px">access=confirmed; buildability=confirmed</td>
+</tr></tbody>
+</table>
+</div>
+</section>
+
+<!-- HUMAN SAMPLE -->
+<section>
+  <h2>Human Review Sample</h2>
+  <div class="alert-box">
+  <strong>⚠️ Human Review Required:</strong> The 3 apps below were selected for manual verification. 
+  No human review has been performed yet. Inspect the evidence URLs to confirm the automated findings.
+</div>
+<div class="wrap">
+<table class="mini-table">
+<thead><tr><th>#</th><th>App</th><th>Category</th><th>Buildability</th><th>Access</th><th>MCP</th><th>Evidence</th><th>Instructions</th></tr></thead>
+<tbody><tr>
+  <td>#1</td>
+  <td>Salesforce</td>
+  <td>CRM and Sales</td>
+  <td>ready</td>
+  <td>self-serve-free</td>
+  <td>official</td>
+  <td><a href="https://www.salesforce.com/blog/api-ecosystem" target="_blank" class="ev-link">URL</a> <a href="https://developer.salesforce.com/docs/commerce/retail-cloud/guide/retail-cloud-api-developer-guide.html" target="_blank" class="ev-link">URL</a> <a href="https://developer.salesforce.com/blogs/2023/06/increase-api-engagement-with-anypoint-api-experience-hub" target="_blank" class="ev-link">URL</a></td>
+  <td style="font-size:11px;color:#f59e0b">⚠️ Visit the evidence URLs for Salesforce, confirm: access=self-serve-free, buildability=ready, api_available=True, mcp_sta</td>
+</tr><tr>
+  <td>#2</td>
+  <td>HubSpot</td>
+  <td>CRM and Sales</td>
+  <td>ready</td>
+  <td>paid-gated</td>
+  <td>official</td>
+  <td><a href="https://developers.hubspot.com/docs/developer-tooling/platform/versioning#api-versioning" target="_blank" class="ev-link">URL</a> <a href="https://growthnatives.com/blogs/hubspot/hubspot-sunsets-api-keys" target="_blank" class="ev-link">URL</a> <a href="https://developers.hubspot.com/docs/apps/legacy-apps/authentication/intro-to-auth" target="_blank" class="ev-link">URL</a></td>
+  <td style="font-size:11px;color:#f59e0b">⚠️ Visit the evidence URLs for HubSpot, confirm: access=paid-gated, buildability=ready, api_available=True, mcp_status=offi</td>
+</tr><tr>
+  <td>#3</td>
+  <td>Pipedrive</td>
+  <td>CRM and Sales</td>
+  <td>ready</td>
+  <td>self-serve-free</td>
+  <td>official</td>
+  <td><a href="https://developers.pipedrive.com" target="_blank" class="ev-link">URL</a> <a href="https://developers.pipedrive.com/docs/api/v1" target="_blank" class="ev-link">URL</a> <a href="https://devcommunity.pipedrive.com/t/old-api-reference/4084" target="_blank" class="ev-link">URL</a></td>
+  <td style="font-size:11px;color:#f59e0b">⚠️ Visit the evidence URLs for Pipedrive, confirm: access=self-serve-free, buildability=ready, api_available=True, mcp_stat</td>
+</tr></tbody>
+</table>
+</div>
+</section>
+
+<!-- ACCURACY -->
+<section>
+  <h2>Accuracy — Before vs After Verification</h2>
+  <div class="accuracy-vis">
+  <div class="acc-box">
+    <div class="acc-label">Initial Accuracy</div>
+    <div class="acc-value" style="color:#6366f1">100.0%</div>
+    <div class="acc-sub">Evidence URL check</div>
+  </div>
+  <div class="acc-arrow">→</div>
+  <div class="acc-box">
+    <div class="acc-label">Verification</div>
+    <div class="acc-value" style="color:#f59e0b">Cross-check</div>
+    <div class="acc-sub">Tavily claim check</div>
+  </div>
+  <div class="acc-arrow">→</div>
+  <div class="acc-box">
+    <div class="acc-label">Final Accuracy</div>
+    <div class="acc-value" style="color:#22c55e">100.0%</div>
+    <div class="acc-sub">Verified claims</div>
+  </div>
+  <div class="acc-arrow">→</div>
+  <div class="acc-box">
+    <div class="acc-label">Improvement</div>
+    <div class="acc-value" style="color:#22c55e">+0.0 pts</div>
+    <div class="acc-sub">Percentage points</div>
+  </div>
+</div>
+  <p style="font-size:13px;color:#64748b;margin-top:16px">
+    <strong>Initial accuracy:</strong> measured by checking whether evidence URLs return live content.<br>
+    <strong>Final accuracy:</strong> measured by cross-checking key claims (access, buildability) via a secondary Tavily search.<br>
+    All numbers are derived from actual pipeline results, not invented.
+  </p>
+</section>
+
+<!-- HITS & MISSES -->
+<section>
+  <h2>Hits &amp; Misses</h2>
+  <div class="two-col">
+  <div>
+    <h3 style="color:#22c55e">✅ Hits (3)</h3>
+    <ul class="hit-miss-list"><li>#1 <strong>Salesforce</strong> — {&#x27;access&#x27;: &#x27;confirmed&#x27;, &#x27;buildability&#x27;: &#x27;confirmed&#x27;}</li><li>#2 <strong>HubSpot</strong> — {&#x27;access&#x27;: &#x27;confirmed&#x27;, &#x27;buildability&#x27;: &#x27;confirmed&#x27;}</li><li>#3 <strong>Pipedrive</strong> — {&#x27;access&#x27;: &#x27;confirmed&#x27;, &#x27;buildability&#x27;: &#x27;confirmed&#x27;}</li></ul>
+  </div>
+  <div>
+    <h3 style="color:#ef4444">❌ Misses (0)</h3>
+    <ul class="hit-miss-list"><li>No misses.</li></ul>
+  </div>
+</div>
+</section>
+
+<!-- 100-APP TABLE -->
+<section>
+  <h2>100-App Research Matrix</h2>
+  <input id="tbl-search" class="search-bar" type="text" placeholder="Filter by app, category, access, buildability…">
+  <div class="wrap">
+    <table id="main-table">
+      <thead><tr>
+        <th>#</th><th>App</th><th>Category</th><th>Description</th>
+        <th>Auth</th><th>Access</th><th>API</th><th>API Type</th><th>Breadth</th>
+        <th>MCP</th><th>Buildability</th><th>Blocker</th><th>Confidence</th><th>Evidence</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+  <td class="num">1</td>
+  <td class="app-name"><strong>Salesforce</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">A CRM and sales platform.</td>
+  <td>API key, token</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://www.salesforce.com/blog/api-ecosystem" target="_blank" rel="noopener" class="ev-link">3 Ways Generative AI Will Help Mark</a> <a href="https://developer.salesforce.com/docs/commerce/retail-cloud/guide/retail-cloud-api-developer-guide.html" target="_blank" rel="noopener" class="ev-link">Point of Sale Developer Guide for N</a> <a href="https://developer.salesforce.com/blogs/2023/06/increase-api-engagement-with-anypoint-api-experience-hub" target="_blank" rel="noopener" class="ev-link">Increase API Engagement with Anypoi</a></td>
+</tr>
+<tr>
+  <td class="num">2</td>
+  <td class="app-name"><strong>HubSpot</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">A CRM and sales platform that provides marketing, sales, and customer service tools.</td>
+  <td>OAuth 2.0, Private app access tokens, API key</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td>✅</td>
+  <td>REST, GraphQL</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://developers.hubspot.com/docs/developer-tooling/platform/versioning#api-versioning" target="_blank" rel="noopener" class="ev-link">HubSpot API Versioning Documentatio</a> <a href="https://growthnatives.com/blogs/hubspot/hubspot-sunsets-api-keys" target="_blank" rel="noopener" class="ev-link">HubSpot API Keys Sunset: What You N</a> <a href="https://developers.hubspot.com/docs/apps/legacy-apps/authentication/intro-to-auth" target="_blank" rel="noopener" class="ev-link">Intro to Auth</a></td>
+</tr>
+<tr>
+  <td class="num">3</td>
+  <td class="app-name"><strong>Pipedrive</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">A CRM and sales platform.</td>
+  <td>API key</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://developers.pipedrive.com" target="_blank" rel="noopener" class="ev-link">Pipedrive Developer Platform</a> <a href="https://developers.pipedrive.com/docs/api/v1" target="_blank" rel="noopener" class="ev-link">Pipedrive API v1 Reference</a> <a href="https://devcommunity.pipedrive.com/t/old-api-reference/4084" target="_blank" rel="noopener" class="ev-link">Old API Reference Discussion</a></td>
+</tr>
+<tr>
+  <td class="num">4</td>
+  <td class="app-name"><strong>Attio</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">Attio is a CRM and sales platform that allows developers to build apps and integrate with AI tools.</td>
+  <td>API key</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST, SDK, Webhook</td>
+  <td>moderate</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://developers.attio.com/docs/webhooks" target="_blank" rel="noopener" class="ev-link">Webhooks Documentation</a> <a href="https://developers.attio.com/reference/get_v2-notes" target="_blank" rel="noopener" class="ev-link">REST API Reference</a> <a href="https://developers.attio.com/docs/webhook-events" target="_blank" rel="noopener" class="ev-link">Webhook Events Documentation</a></td>
+</tr>
+<tr>
+  <td class="num">5</td>
+  <td class="app-name"><strong>Twenty</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">Twenty is a CRM and sales platform that provides REST and GraphQL APIs for data import and integration.</td>
+  <td>API key, OAuth</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST, GraphQL</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://docs.twenty.com/developers/introduction" target="_blank" rel="noopener" class="ev-link">Developer Introduction</a> <a href="https://docs.twenty.com/l/es/developers/extend/capabilities/apis" target="_blank" rel="noopener" class="ev-link">API Capabilities</a> <a href="https://docs.twenty.com/user-guide/data-migration/how-tos/import-data-via-api" target="_blank" rel="noopener" class="ev-link">Data Migration via API</a></td>
+</tr>
+<tr>
+  <td class="num">6</td>
+  <td class="app-name"><strong>Podio</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">Provides a programmable interface to all Podio functionality, allowing integration with other services and building appl</td>
+  <td>API key</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://developers.podio.com" target="_blank" rel="noopener" class="ev-link">Podio Developer Portal</a> <a href="https://developers.podio.com/examples/items" target="_blank" rel="noopener" class="ev-link">Podio Items API Examples</a> <a href="https://developers.podio.com/doc/reference" target="_blank" rel="noopener" class="ev-link">Podio API Reference</a></td>
+</tr>
+<tr>
+  <td class="num">7</td>
+  <td class="app-name"><strong>Zoho CRM</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">A CRM and sales platform offering various APIs and SDKs for integration.</td>
+  <td>OAuth2, API key, token</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST, GraphQL, SDK, CLI</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://www.zoho.com/crm/developer/docs" target="_blank" rel="noopener" class="ev-link">Zoho CRM Developer Documentation</a> <a href="https://www.zoho.com/crm/developer" target="_blank" rel="noopener" class="ev-link">Zoho CRM Developer Portal</a> <a href="https://www.zoho.com/books/api/v3/introduction" target="_blank" rel="noopener" class="ev-link">Zoho Books API Documentation</a></td>
+</tr>
+<tr>
+  <td class="num">8</td>
+  <td class="app-name"><strong>Close</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">A CRM platform with an API for integrations and data management.</td>
+  <td>API key, OAuth 2.0</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://developer.close.com/api/overview" target="_blank" rel="noopener" class="ev-link">Close API Overview</a> <a href="https://developer.close.com/api" target="_blank" rel="noopener" class="ev-link">Close API</a> <a href="https://developer.close.com/api/resources/files" target="_blank" rel="noopener" class="ev-link">Files API</a></td>
+</tr>
+<tr>
+  <td class="num">9</td>
+  <td class="app-name"><strong>Copper</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">A CRM and sales platform with a developer API.</td>
+  <td>OAuth2</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://developer.copper.com/introduction/oauth/flow.html" target="_blank" rel="noopener" class="ev-link">OAuth 2.0 Flow</a> <a href="https://developer.copper.com" target="_blank" rel="noopener" class="ev-link">Copper Developer Portal</a> <a href="https://support.copper.com/en/articles/8823462-api-docs-and-tips" target="_blank" rel="noopener" class="ev-link">API Docs and Tips</a></td>
+</tr>
+<tr>
+  <td class="num">10</td>
+  <td class="app-name"><strong>DealCloud</strong></td>
+  <td>CRM and Sales</td>
+  <td class="desc">A CRM and sales platform.</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td>✅</td>
+  <td>REST, SDK</td>
+  <td>moderate</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://api.docs.dealcloud.com/sdk/csharp" target="_blank" rel="noopener" class="ev-link">DealCloud SDK - C#</a> <a href="https://api.docs.dealcloud.com" target="_blank" rel="noopener" class="ev-link">DealCloud API Documentation</a> <a href="https://api.docs.dealcloud.com/sdk/python" target="_blank" rel="noopener" class="ev-link">DealCloud SDK - Python</a></td>
+</tr>
+<tr>
+  <td class="num">11</td>
+  <td class="app-name"><strong>Zendesk</strong></td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">A customer support and helpdesk platform.</td>
+  <td>token, API key</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td>✅</td>
+  <td>REST, SDK</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="http://developer.zendesk.com/documentation" target="_blank" rel="noopener" class="ev-link">Zendesk Developer Documentation</a> <a href="https://developer.zendesk.com/rest_api" target="_blank" rel="noopener" class="ev-link">Zendesk REST API Reference</a> <a href="https://developer.zendesk.com/api-reference?_gac=1.216811364.1627963757.CjwKCAjwr56IBhAvEiwA1fuqGuFcwiCD97erBSsykX6cfzLsAjlyQC-fAoQxKmoTRW2QA9kdsKOw8BoCwHUQAvD_BwE" target="_blank" rel="noopener" class="ev-link">Zendesk API Reference</a></td>
+</tr>
+<tr>
+  <td class="num">12</td>
+  <td class="app-name"><strong>Intercom</strong></td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">A messaging and customer engagement platform.</td>
+  <td>API key</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://developers.intercom.com/docs/publish-to-the-app-store/intercom-developer-terms" target="_blank" rel="noopener" class="ev-link">Intercom Developer Terms</a> <a href="https://developers.intercom.com/docs" target="_blank" rel="noopener" class="ev-link">Intercom Developer Documentation</a> <a href="https://www.intercom.com/help/en/articles/9071694-intercom-developer-faqs" target="_blank" rel="noopener" class="ev-link">Intercom Developer FAQs</a></td>
+</tr>
+<tr>
+  <td class="num">13</td>
+  <td class="app-name"><strong>Freshdesk</strong></td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">A cloud-based customer support platform.</td>
+  <td>API key</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://support.freshdesk.com/support/solutions/articles/228991-where-do-i-find-the-documentation-for-api-" target="_blank" rel="noopener" class="ev-link">Where do I find the documentation f</a> <a href="https://developers.freshdesk.com/api" target="_blank" rel="noopener" class="ev-link">Freshdesk API Documentation</a> <a href="https://support.freshdesk.com/support/solutions/articles/50000011661-api-actions-library-in-freshdesk" target="_blank" rel="noopener" class="ev-link">API Actions Library in Freshdesk</a></td>
+</tr>
+<tr>
+  <td class="num">14</td>
+  <td class="app-name"><strong>Front</strong></td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">A platform for managing customer support and helpdesk operations.</td>
+  <td>API key</td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">self-serve-free</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>moderate</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://help.front.com/t/q6hscw3/developer-resources-for-building-api-integrations" target="_blank" rel="noopener" class="ev-link">Developer Resources for Building AP</a> <a href="https://help.front.com/en/articles/2309" target="_blank" rel="noopener" class="ev-link">Developer resources for building AP</a> <a href="https://community.front.com/developer-discussion-39" target="_blank" rel="noopener" class="ev-link">Developer Discussion</a></td>
+</tr>
+<tr>
+  <td class="num">15</td>
+  <td class="app-name"><strong>Pylon</strong></td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">Pylon is a support and helpdesk software product that provides programmatic access to data.</td>
+  <td>token</td>
+  <td><span class="badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">paid-gated</span></td>
+  <td>✅</td>
+  <td>REST</td>
+  <td>broad</td>
+  <td><span class="badge" style="background:#6366f122;color:#6366f1;border-color:#6366f155">official</span></td>
+  <td><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e55">ready</span></td>
+  <td class="blocker">unknown</td>
+  <td><span style="color:#22c55e;font-weight:700">high</span></td>
+  <td><a href="https://docs.usepylon.com/pylon-docs/developer/api" target="_blank" rel="noopener" class="ev-link">Pylon API Documentation</a> <a href="https://docs.usepylon.com/pylon-docs/developer/api/authentication" target="_blank" rel="noopener" class="ev-link">Pylon API Authentication</a> <a href="https://docs.usepylon.com/pylon-docs/developer/api/api-reference" target="_blank" rel="noopener" class="ev-link">Pylon API Reference</a></td>
+</tr>
+<tr>
+  <td class="num">16</td>
+  <td class="app-name"><strong>LiveAgent</strong> ⚠️</td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://www.liveagent.com/blog/chat-widget-for-website" target="_blank" rel="noopener" class="ev-link">The best 10 live chat widgets: Revi</a> <a href="https://support.liveagent.com/066804-LiveAgent-API" target="_blank" rel="noopener" class="ev-link">LiveAgent API</a> <a href="https://faq.liveagent.com/575658-API" target="_blank" rel="noopener" class="ev-link">API</a></td>
+</tr>
+<tr>
+  <td class="num">17</td>
+  <td class="app-name"><strong>Plain</strong> ⚠️</td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://help.plain.com/article/developer" target="_blank" rel="noopener" class="ev-link">Admin &amp; Developer - Developer - Ove</a> <a href="https://www.plain.com/blog/api-first-support-platforms" target="_blank" rel="noopener" class="ev-link">Best API-First Support Platforms fo</a> <a href="https://www.plain.com/blog/the-real-10x-engineer" target="_blank" rel="noopener" class="ev-link">Plain — Meet the real 10x engineer</a></td>
+</tr>
+<tr>
+  <td class="num">18</td>
+  <td class="app-name"><strong>Help Scout</strong> ⚠️</td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developer.helpscout.com/open-source" target="_blank" rel="noopener" class="ev-link">Help Scout Developers - Open Source</a> <a href="https://docs.helpscout.com/article/1141-docs-api" target="_blank" rel="noopener" class="ev-link">Docs API - Help Scout Support</a> <a href="https://developer.helpscout.com" target="_blank" rel="noopener" class="ev-link">Help Scout Developers - API Documen</a></td>
+</tr>
+<tr>
+  <td class="num">19</td>
+  <td class="app-name"><strong>Gorgias</strong> ⚠️</td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developers.gorgias.com/docs/overview" target="_blank" rel="noopener" class="ev-link">Overview - gorgias-developers</a> <a href="https://developers.gorgias.com" target="_blank" rel="noopener" class="ev-link">gorgias-developers</a> <a href="https://updates.gorgias.com/labels/developers" target="_blank" rel="noopener" class="ev-link">Gorgias Updates</a></td>
+</tr>
+<tr>
+  <td class="num">20</td>
+  <td class="app-name"><strong>Gladly</strong> ⚠️</td>
+  <td>Support and Helpdesk</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developer.gladly.com/chat" target="_blank" rel="noopener" class="ev-link">Gladly - Documentation</a> <a href="https://developer.gladly.com/rest" target="_blank" rel="noopener" class="ev-link">REST API - Gladly Developer</a> <a href="https://www.gladly.com/app-platform" target="_blank" rel="noopener" class="ev-link">Gladly developer platform: APIs, SD</a></td>
+</tr>
+<tr>
+  <td class="num">21</td>
+  <td class="app-name"><strong>Slack</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://api.slack.com/changelog/2024-12-api-site-migration" target="_blank" rel="noopener" class="ev-link">Slack platform API and tools docs a</a> <a href="https://slack.com/intl/en-in/policy-archives/terms-of-service-api/2025-05-29" target="_blank" rel="noopener" class="ev-link">Slack API Terms of Service | Legal </a> <a href="https://slack.com/policy-archives/terms-of-service-api/2025-05-29" target="_blank" rel="noopener" class="ev-link">Slack API Terms of Service | Legal </a></td>
+</tr>
+<tr>
+  <td class="num">22</td>
+  <td class="app-name"><strong>Twilio</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://www.twilio.com/en-us/blog/new-era-for-twilio-documentation" target="_blank" rel="noopener" class="ev-link">A New Era for Twilio&#x27;s Documentatio</a> <a href="https://www.twilio.com/en-us/blog/developers/new-era-for-twilio-documentation" target="_blank" rel="noopener" class="ev-link">A New Era for Twilio&#x27;s Documentatio</a> <a href="https://www.twilio.com/docs/sendgrid/for-developers" target="_blank" rel="noopener" class="ev-link">Twilio SendGrid developer documenta</a></td>
+</tr>
+<tr>
+  <td class="num">23</td>
+  <td class="app-name"><strong>Zoho Cliq</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://www.zoho.com/cliq/help/platform/faq.html" target="_blank" rel="noopener" class="ev-link">Developers FAQ | Cliq</a> <a href="https://www.zoho.com/cliq/help/platform/getting-started-with-cliq-platform.html" target="_blank" rel="noopener" class="ev-link">Getting Started with Zoho Cliq Deve</a> <a href="https://www.zoho.com/cliq/help/restapi/v3/introduction" target="_blank" rel="noopener" class="ev-link">Introduction | Zoho Cliq | API Docu</a></td>
+</tr>
+<tr>
+  <td class="num">24</td>
+  <td class="app-name"><strong>Lark (Larksuite)</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://open.larksuite.com/document/uAjLw4CM/ukTMukTMukTM/moments-v1/comment/events/created" target="_blank" rel="noopener" class="ev-link">Comment posted - Server API - Docum</a> <a href="https://open.larksuite.com/document/server-docs/vc-v1/meeting/events/recording_started" target="_blank" rel="noopener" class="ev-link">Start recording - Server API - Docu</a> <a href="https://open.larksuite.com/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/recording_started" target="_blank" rel="noopener" class="ev-link">Start recording - Server API - Docu</a></td>
+</tr>
+<tr>
+  <td class="num">25</td>
+  <td class="app-name"><strong>Pumble</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://pumble.com/help/de?p=7104" target="_blank" rel="noopener" class="ev-link">Pumble API-Übersicht - Pumble-Hilfe</a> <a href="https://pumble.com/help/de/integrations/automation-workflow-integrations/api-keys-integration" target="_blank" rel="noopener" class="ev-link">Pumble API-Übersicht - Pumble-Hilfe</a> <a href="https://pumble.com/help/integrations/automation-workflow-integrations/api-keys-integration" target="_blank" rel="noopener" class="ev-link">Pumble API Overview</a></td>
+</tr>
+<tr>
+  <td class="num">26</td>
+  <td class="app-name"><strong>Discord</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://docs.discord.com/developers/change-log" target="_blank" rel="noopener" class="ev-link">Change Log - Documentation - Discor</a> <a href="https://docs.discord.com/developers/quick-start/overview-of-apps" target="_blank" rel="noopener" class="ev-link">Overview of Discord Apps - Document</a> <a href="https://docs.discord.com/developers/topics/oauth2" target="_blank" rel="noopener" class="ev-link">OAuth2 - Documentation - Discord De</a></td>
+</tr>
+<tr>
+  <td class="num">27</td>
+  <td class="app-name"><strong>Telegram</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://core.telegram.org/gateway/api" target="_blank" rel="noopener" class="ev-link">Telegram Gateway API</a> <a href="https://core.telegram.org" target="_blank" rel="noopener" class="ev-link">Telegram APIs</a> <a href="https://core.telegram.org/api/terms" target="_blank" rel="noopener" class="ev-link">Telegram API Terms of Service</a></td>
+</tr>
+<tr>
+  <td class="num">28</td>
+  <td class="app-name"><strong>WhatsApp Business</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/about-the-platform" target="_blank" rel="noopener" class="ev-link">About the WhatsApp Business Platfor</a> <a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/get-started" target="_blank" rel="noopener" class="ev-link">WhatsApp Cloud API Get Started - Me</a> <a href="https://developers.facebook.com/documentation/business-messaging/whatsapp/reference/whatsapp-business-account/whatsapp-business-account-api" target="_blank" rel="noopener" class="ev-link">WhatsApp Business Account API - Met</a></td>
+</tr>
+<tr>
+  <td class="num">29</td>
+  <td class="app-name"><strong>Aircall</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developer.aircall.io/docs/introduction" target="_blank" rel="noopener" class="ev-link">Introduction - Aircall for Develope</a> <a href="https://developer.aircall.io/docs/sms" target="_blank" rel="noopener" class="ev-link">Overview</a> <a href="https://developer.aircall.io/docs/calls" target="_blank" rel="noopener" class="ev-link">Overview</a></td>
+</tr>
+<tr>
+  <td class="num">30</td>
+  <td class="app-name"><strong>Vonage</strong> ⚠️</td>
+  <td>Communications and Messaging</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developer.vonage.com/en/team" target="_blank" rel="noopener" class="ev-link">Vonage API Developer</a> <a href="https://developer.vonage.com/en/application/overview" target="_blank" rel="noopener" class="ev-link">Vonage Application API Overview | V</a> <a href="https://developer.vonage.com/en/vonage-business-cloud/overview" target="_blank" rel="noopener" class="ev-link">Vonage Business Communication APIs </a></td>
+</tr>
+<tr>
+  <td class="num">31</td>
+  <td class="app-name"><strong>Google Ads</strong> ⚠️</td>
+  <td>Marketing, Ads, Email and Social</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developers.google.com/google-ads/api/rest/design/overview" target="_blank" rel="noopener" class="ev-link">REST Interface Design  |  Google Ad</a> <a href="https://developers.google.com/google-ads/api/docs/developer-toolkit/mcp-server?hl=id" target="_blank" rel="noopener" class="ev-link">Server MCP Google Ads: Panduan inte</a> <a href="https://developers.google.com/google-ads/api/docs/developer-toolkit/mcp-server#get-started" target="_blank" rel="noopener" class="ev-link">Google Ads MCP server: Developer in</a></td>
+</tr>
+<tr>
+  <td class="num">32</td>
+  <td class="app-name"><strong>Meta Ads</strong> ⚠️</td>
+  <td>Marketing, Ads, Email and Social</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://developers.facebook.com/docs/graph-api/support-and-tools?locale=fr_FR" target="_blank" rel="noopener" class="ev-link">Status, Support, and Tools - Dévelo</a> <a href="https://developers.facebook.com/docs/graph-api/support-and-tools" target="_blank" rel="noopener" class="ev-link">Status, Support, and Tools - App De</a> <a href="https://developers.facebook.com/docs/marketing-api/brand-safety-and-suitability/brand-safety-partners" target="_blank" rel="noopener" class="ev-link">Brand safety and suitability partne</a></td>
+</tr>
+<tr>
+  <td class="num">33</td>
+  <td class="app-name"><strong>LinkedIn Ads</strong> ⚠️</td>
+  <td>Marketing, Ads, Email and Social</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://learn.microsoft.com/en-us/linkedin/marketing/integrations/marketing-integrations-overview?view=li-lms-2026-07" target="_blank" rel="noopener" class="ev-link">LinkedIn Marketing Developer Platfo</a> <a href="https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2026-06" target="_blank" rel="noopener" class="ev-link">Recent Marketing API Changes - Link</a> <a href="https://learn.microsoft.com/en-us/linkedin/marketing/overview?view=li-lms-2026-04" target="_blank" rel="noopener" class="ev-link">LinkedIn Marketing API - Overview -</a></td>
+</tr>
+<tr>
+  <td class="num">34</td>
+  <td class="app-name"><strong>GoHighLevel</strong> ⚠️</td>
+  <td>Marketing, Ads, Email and Social</td>
+  <td class="desc">Extraction failed after 3 attempts.</td>
+  <td>—</td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td>❌</td>
+  <td>—</td>
+  <td>unknown</td>
+  <td><span class="badge" style="background:#cbd5e122;color:#cbd5e1;border-color:#cbd5e155">unknown</span></td>
+  <td><span class="badge" style="background:#94a3b822;color:#94a3b8;border-color:#94a3b855">unknown</span></td>
+  <td class="blocker">—</td>
+  <td><span style="color:#ef4444;font-weight:700">low</span></td>
+  <td><a href="https://marketplace.gohighlevel.com/docs/Authorization/DeveloperGlossary" target="_blank" rel="noopener" class="ev-link">Developer&#x27;s Glossary of Terms | Hig</a> <a href="https://help.gohighlevel.com/support/solutions/articles/48001060529-highlevel-api-documentation" target="_blank" rel="noopener" class="ev-link">HighLevel API Documentation</a> <a href="https://marketplace.gohighlevel.com/docs/Authorization/OAuth2.0" target="_blank" rel="noopener" class="ev-link">OAuth 2.0 | HighLevel API</a></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section>
+  <h2>Methodology</h2>
+  <p style="font-size:14px;color:#475569;line-height:1.8">
+    <strong>Data collection:</strong> For each of the 100 apps from the README, four targeted Tavily searches were run 
+    (API docs, authentication, pricing/access, MCP). The top 8 search results were crawled; 
+    the first 3 with readable content were combined (up to ~12,000 chars each).<br><br>
+    <strong>Extraction:</strong> The combined text was sent to self-hosted Gemma 4 26B via an OpenAI-compatible HTTP endpoint. 
+    Gemma was prompted to return only JSON matching the Pydantic schema. Up to 3 retries were attempted on parse failure.<br><br>
+    <strong>Validation:</strong> All responses were validated with Pydantic. Apps that failed all retries were marked 
+    <code>needs_manual_review=True</code>.<br><br>
+    <strong>Verification:</strong> Evidence URLs were checked for liveness. Key claims (access, buildability) were 
+    cross-checked via a secondary Tavily search to determine confirmed / unverifiable status.<br><br>
+    <strong>Honesty:</strong> No research data, evidence, or accuracy numbers were fabricated. 
+    Where sources were inaccessible, the result reflects that limitation.
+  </p>
+</section>
+
+</main>
+<script>
+function filterRows() {
+  const q = document.getElementById('tbl-search').value.toLowerCase();
+  document.querySelectorAll('#main-table tbody tr').forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('tbl-search').addEventListener('keyup', filterRows);
+});
+</script>
+</body>
+</html>
