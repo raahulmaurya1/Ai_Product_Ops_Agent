@@ -3,6 +3,10 @@
 An AI-powered research agent that automatically investigates 100 applications for API access, authentication, developer availability, MCP support, buildability, blockers, and evidence, then generates a data-driven HTML case study.
 
 ---
+<p align="center">
+  <a href="https://raahulmaurya1.github.io/Ai_Product_Ops_Agent/" target="_blank">
+  </a>
+</p>
 
 ## 🎯 Overview
 
@@ -33,21 +37,11 @@ For each application, the agent extracts structured research fields validated ag
 ---
 
 ## 🧠 How It Works
+<p align="center">
+  <img src="https://github.com/raahulmaurya1/Ai_Product_Ops_Agent/blob/26bd8013337fd81d8b1710c94a1e964b631cc529/composio_research_agent_pipeline.png" alt="AI Product Ops Research Agent" width="900">
+</p>
+    
 
-
-flowchart LR
-    A[README: 100 Apps]
-    B[Tavily Search]
-    C[Web Crawler]
-    D[Gemma 4 26B]
-    E[Pydantic Validation]
-    F[Persist Results]
-    G[Verification]
-    H[Pattern Analysis]
-    I[HTML Case Study]
-
-    A --> B --> C --> D --> E --> F --> G --> H --> I
-```
 
 1. **README Parsing:** Parses the local README table to extract up to 100 application targets.
 2. **Tavily Search:** Runs 4 targeted queries per app (docs, auth, pricing, MCP) to find relevant sources.
@@ -61,26 +55,35 @@ flowchart LR
 
 ---
 
+
 ## 🏗️ Project Structure
 
 ```text
+## 📁 Project Structure
+
+```text
 ai-product-ops-research-agent/
-├── README.md           # The root app list and documentation
-├── .env.example        # Template for required API keys and URLs
-├── requirements.txt    # Python dependencies
+│
+├── README.md
+├── .env.example
+├── requirements.txt
+│
 ├── src/
 │   └── agent/
-│       ├── main.py     # CLI entry point and pipeline orchestration
-│       ├── models.py   # Pydantic schemas for structured extraction
-│       ├── search.py   # Tavily-powered search logic
-│       ├── crawler.py  # HTTP fetching and text extraction
-│       ├── extractor.py# Gemma LLM prompt generation and JSON parsing
-│       ├── verify.py   # Automated claim checking and human sample generation
-│       ├── analyze.py  # Aggregation of results and trend analysis
-│       └── report.py   # HTML case study generator
-├── data/               # Output directory for raw JSON results
-└── reports/            # Output directory for HTML case studies
-```
+│       ├── main.py        # CLI entry point and pipeline orchestration
+│       ├── models.py      # Pydantic schemas for structured results
+│       ├── search.py      # Tavily-powered web search
+│       ├── crawler.py     # Web fetching and text extraction
+│       ├── extractor.py   # Gemma-powered structured extraction
+│       ├── verify.py      # Research verification
+│       ├── analyze.py     # Result aggregation and pattern analysis
+│       └── report.py      # HTML case-study generation
+│
+├── data/
+│   └── results.json       # Generated research results
+│
+└── reports/
+    └── report_*.html      # Generated HTML case studies
 
 ---
 
@@ -311,18 +314,3 @@ The pipeline automatically writes to `results.json` after every app. If a crash 
 * Persistent database storage (e.g., PostgreSQL/SQLite) instead of flat JSON files (NOT currently implemented).
 
 ---
-
-## 🎤 How I Would Explain This Project
-
-> I built an automated product research agent that parses 100 applications, discovers relevant developer documentation using Tavily, crawls the sources via HTTP, uses a self-hosted Gemma model to extract structured API/integration information, strictly validates the output with Pydantic, stores evidence, independently verifies the findings, aggregates the results to identify patterns, and finally generates a comprehensive HTML case study.
-
-### Likely Interview Discussion Points:
-
-* **Why Tavily?** It's highly optimized for returning clean, relevant links and snippets compared to generic search APIs, which helps pinpoint API documentation faster.
-* **Why an LLM for research extraction?** Documentation schemas vary wildly across 100 different companies. An LLM acts as a semantic parser that normalizes chaotic text into a unified structure.
-* **How are hallucinations reduced?** We provide explicit instruction to return "unknown" rather than guessing, and we enforce a strict Pydantic schema with hardcoded enums.
-* **Why Pydantic?** It acts as an unbreakable guardrail, ensuring we never pollute our dataset with malformed or unexpectedly formatted JSON.
-* **How is evidence preserved?** For every data point, the crawler retains the exact source URL and the LLM explicitly returns the link as a piece of evidence.
-* **How does verification work?** `verify.py` ensures the evidence URLs are accessible, and runs secondary searches to cross-check extracted facts against official documentation.
-* **How are patterns calculated?** `analyze.py` aggregates frequency counts across all verified results to identify easy wins, blockers, and category distribution.
-* **How is the HTML report generated?** A pure Python script (`report.py`) injects the analyzed metrics into a self-contained HTML template with inline SVG charts, no heavy frontend frameworks required.
