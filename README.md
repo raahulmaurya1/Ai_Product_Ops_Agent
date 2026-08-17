@@ -4,7 +4,8 @@ An AI-powered research agent that automatically investigates 100 applications fo
 
 ---
 <p align="center">
-  <a href="https://raahulmaurya1.github.io/Ai_Product_Ops_Agent/" target="_blank">
+  <a href="https://raahulmaurya1.github.io/Ai_Product_Ops_Agent/">
+    🚀 View Live AI Product Ops Research Report
   </a>
 </p>
 
